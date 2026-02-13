@@ -1,30 +1,21 @@
+from _typeshed import Self
 from enum import Enum
+from dataclasses import dataclass
 
 
 class ErrorTypes(Enum):
+    #Tipe errors
     NULL = 1
 
-class CorrectionTypes(Enum):
-    REMOVED_NULL = 1
+    #Corrections
+    REMOVED_NULL = 50
 
 
-
-class LineError(Enum):
+@dataclass()
+class LineError:
     column: int
     type_error: ErrorTypes
-
-
-class ValidationError:
+@dataclass()
+class DataError:
     error: dict[int, list[LineError]]
-
-
-
-class LineCorrection:
-    column: int
-    correction_type: CorrectionTypes
-
-
-class CorrectionError:
-    correction: dict[int, list[LineCorrection]]
-
 
