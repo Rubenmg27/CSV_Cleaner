@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
-from csvclean.models.data_register import LineError, ValidationError
+from csvclean.models.data_register import DataError, LineError
 
 from .null_validator import NullValidator
 
@@ -13,8 +13,8 @@ class BaseValidator(ABC):
     def validate_line(self, line: list[str | int]) -> list[LineError]: ...
 
 
-    def validate_file(self, data: pd.DataFrame) -> ValidationError:
-        validation_errors: ValidationError = ValidationError({})
+    def validate_file(self, data: pd.DataFrame) -> DataError:
+        validation_errors: DataError = DataError({})
 
         for line_number, row in enumerate(data.iterrows()):
 
@@ -32,12 +32,9 @@ class BaseValidator(ABC):
         return validation_errors
 
 
-
-
-
-    def validate(self, data: str | pd.DataFrame) -> ValidationError:
+    def validate(self, data: str | pd.DataFrame) -> DataError:
         if isinstance(data, str):
             pass #PARA LINEA
         else:
             return self.validate_file(data)
-        return ValidationError({})
+        return DataError({})
