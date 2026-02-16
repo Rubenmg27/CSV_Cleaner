@@ -43,7 +43,7 @@ Para bajar el entorno virtual y para ejecutar el cleaner debemos poner:
 
 ```text
 
-uv run python main.py --input tests\fixtures\dirty_data.csv --output tests\fixtures\expected_csv --report
+uv run python main.py --input tests\fixtures\dirty_data.csv --output tests\fixtures\clean_csv.csv --report
 ```
 
 ## Ejemplo de Ejecución

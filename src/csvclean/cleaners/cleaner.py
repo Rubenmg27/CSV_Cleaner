@@ -1,10 +1,16 @@
+from abc import ABC, abstractmethod
 from typing import Any
 
 from csvclean.models.data_register import ErrorTypes, LineError
 from csvclean.validators.data_validator import DataValidator
 
 
-class NullCleaner:
+class Cleaner(ABC):
+    @abstractmethod
+    def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]: ...
+
+
+class NullCleaner(Cleaner):
     """Cleaner specialized in handling null value errors."""
 
     def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
@@ -26,7 +32,7 @@ class NullCleaner:
         return row, errors
 
 
-class TypeCleaner:
+class TypeCleaner(Cleaner):
     """Cleaner specialized in handling data type mismatch errors."""
 
     def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
