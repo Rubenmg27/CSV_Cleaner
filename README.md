@@ -32,6 +32,9 @@ CSV_Cleaner/
 
 └── README.md
 ```
+## Instalación y uso
+Se necesita ejecutar en la terminal uv sync para bajar el entorno virtual y para ejecutar el cleaner debemos poner uv run python -m main.py --input tests\fixtures\dirty_data.csv --output tests\fixtures\expected_csv --report tests\fixtures\report.txt
+
 
 ##  Ejemplo de Ejecución
 
@@ -79,4 +82,5 @@ There are 0 of ErrorTypes.TYPE.
 There were 5 errors in total.
 3 rows has been fixed.
 ```
+
 
