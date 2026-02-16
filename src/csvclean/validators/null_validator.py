@@ -17,7 +17,6 @@ class NullValidator(BaseValidator):
 
         return bool(value == "")
 
-
     def validate_line(self, line: list[str], config: Configuration) -> LineError:
         """
         Validate there is not null errors in line
@@ -32,7 +31,6 @@ class NullValidator(BaseValidator):
 
         null_errors: LineError = {}
 
-        # Puede que falta listar por el numero de columnas poruqe puede haber menos elementos de los debidos
         for column_number, element in enumerate(line):
             if self.is_null(element):
                 null_errors[column_number] = ErrorTypes.NULL

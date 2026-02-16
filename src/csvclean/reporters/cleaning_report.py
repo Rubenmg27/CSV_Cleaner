@@ -4,7 +4,22 @@ from csvclean.models.data_register import ErrorTypes, LineError
 
 
 class Report:
+    """
+    Class that count the errors and generate a report with them.
+
+    :attribute count_errors_by_type: Number of errors by type.
+    :type count_errors_by_type: dict{ErrorTypes: int}
+    :attribute total_errors: Total of errors.
+    :type total_errors: int
+    :attribute fixed_rows: Number of fixed rows.
+    :type fixed_rows: int
+    """
+
     def __init__(self):
+        """
+        Initialize all counters to 0
+
+        """
         self.count_errors_by_type = {
             ErrorTypes.NULL: 0,
             ErrorTypes.TYPE: 0,
@@ -16,8 +31,8 @@ class Report:
         """
         Report the statistics into ./src/tests/fixtures/report.txt.
 
-        :param errors: Dictionary with the errors in each row.
-        :type errors: DataError
+        :param errors: Dictionary with the errors in one row.
+        :type errors: LineError
         """
 
         for _, error in errors.items():
@@ -27,8 +42,14 @@ class Report:
         if len(errors) > 0:
             self.fixed_rows += 1
 
-    def do_report(self):
-        path = Path("./tests/fixtures/report.txt")
+    def do_report(self, report_path: str = "./tests/fixtures/report.txt"):
+        """
+        Do the report with the statics saved.
+
+        :param report_path: path to save the report
+        :type report_path: str
+        """
+        path: Path = Path(report_path)
         with path.open("w") as f:
             for type_error, count_error in self.count_errors_by_type.items():
                 f.write(f"There are {count_error} of {type_error}.\n")

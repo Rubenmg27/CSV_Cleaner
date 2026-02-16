@@ -1,9 +1,7 @@
-from typing import Any, List, get_args
-
-from csvclean.models.data_register import ErrorTypes
-import pandas as pd
+from typing import Any
 
 from csvclean.models.config import Configuration
+from csvclean.models.data_register import ErrorTypes
 
 
 class DataValidator:
@@ -27,9 +25,7 @@ class DataValidator:
         return data
 
     @staticmethod
-    def require_configuration__header_types(
-        config: Configuration, name: str = "data"
-    ) -> None:
+    def require_configuration__header_types(config: Configuration, name: str = "data") -> None:
         """
         Ensure configuration has header_types no empty
 
@@ -40,7 +36,7 @@ class DataValidator:
         :raises ValueError: No type
         """
 
-        if len(config.header_types) > 0:
+        if len(config.header_types) <= 0:
             raise ValueError(f"{name} must has types in the list rather than to be a empty list")
 
     @staticmethod
@@ -76,6 +72,7 @@ class DataValidator:
         if not isinstance(data, list) and all(isinstance(element, str) for element in data):
             raise TypeError(f"{name} must be list[str], got {type(data).__name__}")
         return data
+
     @staticmethod
     def require_row(row: Any) -> list[str]:
         """

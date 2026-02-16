@@ -1,5 +1,5 @@
-from .base_validator import BaseValidator
+from .validator_manager import ValidatorManager
 
 __all__ = [
-    "BaseValidator",
+    "ValidatorManager",
 ]

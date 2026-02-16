@@ -8,7 +8,6 @@ from .data_validator import DataValidator
 
 
 class TypeValidator(BaseValidator):
-
     def is_incorrect_type(self, value: str, expected_type: type) -> bool:
         """
         Check of "value" has the same type than expected_type
@@ -25,9 +24,9 @@ class TypeValidator(BaseValidator):
         knonw_types: dict[str, str] = {
             "int": r"^-?\d+$",
             "float": r"^-?\d+\.\d+$",
-            "str": r".+",  # Cualquier cadena que no esté vacía
+            "str": r".+",
             "bool": r"^(?i)(true|false|1|0|yes|no)$",
-            "datetime": r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$",  # Formato ISO: YYYY-MM-DD o YYYY-MM-DD HH:MM:SS
+            "datetime": r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$",
         }
 
         return not bool(re.fullmatch(knonw_types[expected_type.__name__], value))
@@ -44,8 +43,7 @@ class TypeValidator(BaseValidator):
         :rtype: LineError
         """
         DataValidator.require_configuration__header_types(
-            config,
-            "type_validator.validate_line.config"
+            config, "type_validator.validate_line.config"
         )
 
         type_errors: LineError = {}

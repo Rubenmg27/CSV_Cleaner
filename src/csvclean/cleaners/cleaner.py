@@ -63,26 +63,6 @@ class TypeCleaner:
         return row, errors
 
 
-# class DuplicateCleaner:
-#     """Cleaner specialized in handling duplicate record errors."""
-
-#     def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
-#         """
-#         Validates if the row is marked as a DUPLICATE.
-
-#         Args:
-#             row (List[str]): The input data row as a list of strings.
-#             errors (LineError): Dictionary mapping column indices to ErrorTypes.
-
-#         Returns:
-#             Tuple[List[str], LineError]: An empty list and the errors if a DUPLICATE
-#                 error is found; otherwise, the original row and errors.
-#         """
-#         if any(e == ErrorTypes.DUPLICATE for e in errors.values()):
-#             return [], errors  # noqa: ERA001
-#         return row, errors  # noqa: ERA001
-
-
 class LineOrchestrator:
     """
     Orchestrates the cleaning process by executing multiple cleaners
@@ -97,11 +77,11 @@ class LineOrchestrator:
             config (Dict[str, bool]): Configuration dictionary (e.g.,
                 {"use_null": True, "use_type": True, "use_duplicate": True}).
         """
-        
+
         self.config = {
-                    "use_null": getattr(config, "trate_nullerror", False),
-                    "use_type": getattr(config, "trate_typeerror", False),
-                }
+            "use_null": getattr(config, "trate_nullerror", False),
+            "use_type": getattr(config, "trate_typeerror", False),
+        }
         self.null_cleaner = NullCleaner()
         self.type_cleaner = TypeCleaner()
         # self.duplicate_cleaner = DuplicateCleaner()  # noqa: ERA001
