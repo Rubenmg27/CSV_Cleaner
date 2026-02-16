@@ -50,5 +50,6 @@ def base_process(csv_path: str, outputpath: str, do_report: bool):
                 io_layer.write(outputpath, csv_row_clean)
 
         except StopIteration:
-            reporter.do_report()
+            if do_report:
+                reporter.do_report()
             break

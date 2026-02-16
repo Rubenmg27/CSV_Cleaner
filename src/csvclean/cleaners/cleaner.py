@@ -1,22 +1,7 @@
-from dataclasses import dataclass
 from typing import Any
 
 from csvclean.models.data_register import ErrorTypes, LineError
 from csvclean.validators.data_validator import DataValidator
-
-
-@dataclass
-class CleanResult:
-    """
-    Represents the result of a row cleaning operation.
-
-    Attributes:
-        row (List[str]): The processed row. Empty if the row was discarded.
-        correction (LineError): The dictionary of errors associated with the row.
-    """
-
-    row: list[str]
-    correction: LineError
 
 
 class NullCleaner:
