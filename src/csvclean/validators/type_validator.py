@@ -3,39 +3,23 @@ import re
 from csvclean.models.config import Configuration
 from csvclean.models.data_register import ErrorTypes, LineError
 
-
+from .base_validator import BaseValidator
 from .data_validator import DataValidator
 
 
-class TypeValidator:
-    # def is_incorrect_type(self, value: CsvContent, expected_type: type) -> bool:
-    #     """
-    #         Check of "value" has the same type than expected_type
-
-    #         :param value: Value to check
-    #         :type line: CsvContent
-    #         :param expected_type: Expected tipe in value
-    #         :type expected_type: type
-    #         :return: Boolean to indicate if is not the expected type
-    #         :rtype: bool
-    #     """
-    #     DataValidator.require_csvcontent(value, "null_validator.is_incorrect_type.value")
-    #     DataValidator.require_type(expected_type, "null_validator.is_incorrect_type.expected_type")
-
-    #     return not isinstance(value, expected_type)
+class TypeValidator(BaseValidator):
 
     def is_incorrect_type(self, value: str, expected_type: type) -> bool:
         """
         Check of "value" has the same type than expected_type
 
         :param value: Value to check
-        :type line: CsvContent
+        :type line: str
         :param expected_type: Expected tipe in value
         :type expected_type: type
-        :return: Boolean to indicate if is not the expected type
+        :return: Boolean to indicate if it is not the expected type
         :rtype: bool
         """
-        # DataValidator.require_csvcontent(value, "null_validator.is_incorrect_type.value")
         DataValidator.require_type(expected_type, "null_validator.is_incorrect_type.expected_type")
 
         knonw_types: dict[str, str] = {
@@ -53,14 +37,16 @@ class TypeValidator:
         Validate there is not type errors in line
 
         :param line: Line to check
-        :type line: pd.DataFrame
+        :type line: list[str]
         :param config: Configuration of validator
         :type config: Configuration
         :return: List of type errors in line
-        :rtype: list[LineError]
+        :rtype: LineError
         """
-        # DataValidator.require_one_row(line, "null_validator.validate_line.line")
-        # DataValidator.require_configuration__header_types__columns(config, line)
+        DataValidator.require_configuration__header_types(
+            config,
+            "type_validator.validate_line.config"
+        )
 
         type_errors: LineError = {}
 
@@ -69,14 +55,3 @@ class TypeValidator:
                 type_errors[column_number] = ErrorTypes.TYPE
 
         return type_errors
-
-        # type_errors: list[LineError] = []
-
-        # dict_line: dict[str, dict[int, CsvContent]] = line.to_dict()
-
-        # for  column_number, column_key in enumerate(dict_line):
-
-        #     if self.is_incorrect_type(dict_line[column_key][0], config.header_types[column_number]):
-        #         type_errors.append(LineError(column_number, ErrorTypes.TYPE))
-
-        # return type_errors
