@@ -1,0 +1,4 @@
+There are 3 of ErrorTypes.NULL.
+There are 0 of ErrorTypes.TYPE.
+There were 3 errors in total.
+2 rows has been fixed.

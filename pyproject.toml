@@ -20,7 +20,7 @@ build-backend = "setuptools.build_meta"
 package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src.csvclean"]
 
 [tool.ruff]
 line-length = 100
@@ -30,47 +30,47 @@ src = ["src", "tests"]
 [tool.ruff.lint]
 select = [
     # --- Errores básicos (no negociables) ---
-    "E",       # pycodestyle errors (indentación, espacios, sintaxis)
-    "W",       # pycodestyle warnings
-    "F",       # pyflakes (imports sin usar, variables sin definir, etc.)
+    "E", # pycodestyle errors (indentación, espacios, sintaxis)
+    "W", # pycodestyle warnings
+    "F", # pyflakes (imports sin usar, variables sin definir, etc.)
 
     # --- Clean Code: naming y estilo ---
-    "N",       # pep8-naming (clases CamelCase, funciones snake_case, constantes UPPER)
-    "I",       # isort (imports ordenados y agrupados)
-    "UP",      # pyupgrade (usa sintaxis moderna de Python 3.12)
+    "N",  # pep8-naming (clases CamelCase, funciones snake_case, constantes UPPER)
+    "I",  # isort (imports ordenados y agrupados)
+    "UP", # pyupgrade (usa sintaxis moderna de Python 3.12)
 
     # --- Clean Code: complejidad y estructura ---
-    "C90",     # mccabe complexity (funciones demasiado complejas)
-    "B",       # flake8-bugbear (errores comunes y malas prácticas)
-    "SIM",     # flake8-simplify (simplifica código innecesariamente complejo)
-    "C4",      # flake8-comprehensions (list/dict comprehensions más limpias)
-    "RET",     # flake8-return (return statements innecesarios o confusos)
-    "PIE",     # flake8-pie (misc. linting para código más limpio)
+    "C90", # mccabe complexity (funciones demasiado complejas)
+    "B",   # flake8-bugbear (errores comunes y malas prácticas)
+    "SIM", # flake8-simplify (simplifica código innecesariamente complejo)
+    "C4",  # flake8-comprehensions (list/dict comprehensions más limpias)
+    "RET", # flake8-return (return statements innecesarios o confusos)
+    "PIE", # flake8-pie (misc. linting para código más limpio)
 
     # --- Clean Code: code smells ---
-    "T20",     # flake8-print (NO usar print → usar logging)
-    "ERA",     # eradicate (código comentado = code smell, bórralo)
-    "ARG",     # flake8-unused-arguments (argumentos que no se usan)
+    "T20", # flake8-print (NO usar print → usar logging)
+    "ERA", # eradicate (código comentado = code smell, bórralo)
+    "ARG", # flake8-unused-arguments (argumentos que no se usan)
 
     # --- Clean Code: funciones y clases ---
-    "PLR",     # pylint refactor (demasiados argumentos, demasiados returns, etc.)
-    "PLW",     # pylint warnings (variables shadowed, comparaciones peligrosas)
+    "PLR", # pylint refactor (demasiados argumentos, demasiados returns, etc.)
+    "PLW", # pylint warnings (variables shadowed, comparaciones peligrosas)
 
     # --- Buenas prácticas Python moderno ---
-    "PTH",     # flake8-use-pathlib (Path() en vez de os.path)
-    "RUF",     # ruff-specific (reglas adicionales de calidad)
+    "PTH", # flake8-use-pathlib (Path() en vez de os.path)
+    "RUF", # ruff-specific (reglas adicionales de calidad)
 ]
 
 ignore = [
     # --- Reglas que desactivamos con criterio ---
     "PLR2004", # magic values en comparaciones — los alumnos usan Field(gt=0) en Pydantic,
-               # no necesitan constantes para cada número en validadores y tests
+    # no necesitan constantes para cada número en validadores y tests
     "PLR0913", # demasiados argumentos en función — composición con inyección de dependencias
-               # a veces requiere 4-5 parámetros en __init__, y eso está bien
-    "ARG002",  # argumento sin usar en método — necesario para cumplir Protocols donde
-               # la firma exige parámetros que una implementación concreta no usa
-    "RET504",  # asignación innecesaria antes de return — a veces mejora legibilidad:
-               # result = compute(); return result es más claro que return compute()
+    # a veces requiere 4-5 parámetros en __init__, y eso está bien
+    "ARG002", # argumento sin usar en método — necesario para cumplir Protocols donde
+    # la firma exige parámetros que una implementación concreta no usa
+    "RET504", # asignación innecesaria antes de return — a veces mejora legibilidad:
+    # result = compute(); return result es más claro que return compute()
 ]
 
 [tool.ruff.lint.per-file-ignores]

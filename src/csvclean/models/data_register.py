@@ -1,21 +1,18 @@
-from _typeshed import Self
 from enum import Enum
-from dataclasses import dataclass
+from typing import TypeAlias
 
 
 class ErrorTypes(Enum):
-    #Tipe errors
+    # Tipe errors
     NULL = 1
+    TYPE = 2
+    DUPLICATE = 3
 
-    #Corrections
+    # Corrections
     REMOVED_NULL = 50
+    FIXED_TYPE = 51
 
 
-@dataclass()
-class LineError:
-    column: int
-    type_error: ErrorTypes
-@dataclass()
-class DataError:
-    error: dict[int, list[LineError]]
+LineError: TypeAlias = dict[int, ErrorTypes]
 
+TYPE_MAP = {"str": str, "int": int, "float": float, "bool": bool}

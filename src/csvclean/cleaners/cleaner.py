@@ -1,28 +1,26 @@
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, TypeAlias
 
-from csvclean.cleaners.null_cleanerold import ErrorTypes
+from csvclean.models.data_register import ErrorTypes, LineError
 
-# Type alias for a dictionary where key is column index and value is the error type
-LineError: TypeAlias = dict[int, ErrorTypes]
 
 @dataclass
 class CleanResult:
     """
     Represents the result of a row cleaning operation.
-    
+
     Attributes:
         row (List[str]): The processed row. Empty if the row was discarded.
         correction (LineError): The dictionary of errors associated with the row.
     """
-    row: List[str]  
+
+    row: list[str]
     correction: LineError
 
 
 class NullCleaner:
     """Cleaner specialized in handling null value errors."""
 
-    def clean(self, row: List[str], errors: LineError) -> Tuple[List[str], LineError]:
+    def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
         """
         Validates if the row contains any NULL type errors.
 
@@ -31,17 +29,18 @@ class NullCleaner:
             errors (LineError): Dictionary mapping column indices to ErrorTypes.
 
         Returns:
-            Tuple[List[str], LineError]: An empty list and the errors if a NULL 
+            Tuple[List[str], LineError]: An empty list and the errors if a NULL
                 is found; otherwise, the original row and errors.
         """
         if ErrorTypes.NULL in errors.values():
             return [], errors
         return row, errors
 
+
 class TypeCleaner:
     """Cleaner specialized in handling data type mismatch errors."""
 
-    def clean(self, row: List[str], errors: LineError) -> Tuple[List[str], LineError]:
+    def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
         """
         Validates if the row contains any TYPE mismatch errors.
 
@@ -50,17 +49,18 @@ class TypeCleaner:
             errors (LineError): Dictionary mapping column indices to ErrorTypes.
 
         Returns:
-            Tuple[List[str], LineError]: An empty list and the errors if a TYPE 
+            Tuple[List[str], LineError]: An empty list and the errors if a TYPE
                 error is found; otherwise, the original row and errors.
         """
         if any(err == ErrorTypes.TYPE for err in errors.values()):
             return [], errors
         return row, errors
-    
+
+
 class DuplicateCleaner:
     """Cleaner specialized in handling duplicate record errors."""
 
-    def clean(self, row: List[str], errors: LineError) -> Tuple[List[str], LineError]:
+    def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
         """
         Validates if the row is marked as a DUPLICATE.
 
@@ -69,25 +69,26 @@ class DuplicateCleaner:
             errors (LineError): Dictionary mapping column indices to ErrorTypes.
 
         Returns:
-            Tuple[List[str], LineError]: An empty list and the errors if a DUPLICATE 
+            Tuple[List[str], LineError]: An empty list and the errors if a DUPLICATE
                 error is found; otherwise, the original row and errors.
         """
         if any(e == ErrorTypes.DUPLICATE for e in errors.values()):
             return [], errors
         return row, errors
-    
+
+
 class LineOrchestrator:
     """
-    Orchestrates the cleaning process by executing multiple cleaners 
+    Orchestrates the cleaning process by executing multiple cleaners
     based on a provided configuration.
     """
 
-    def __init__(self, config: Dict[str, bool]):
+    def __init__(self, config: dict[str, bool]):
         """
         Initializes the orchestrator with specific cleaning toggles.
 
         Args:
-            config (Dict[str, bool]): Configuration dictionary (e.g., 
+            config (Dict[str, bool]): Configuration dictionary (e.g.,
                 {"use_null": True, "use_type": True, "use_duplicate": True}).
         """
         self.config = config
@@ -95,11 +96,11 @@ class LineOrchestrator:
         self.type_cleaner = TypeCleaner()
         self.duplicate_cleaner = DuplicateCleaner()
 
-    def process(self, row: List[str], errors: LineError) -> Tuple[List[str], LineError]:
+    def process(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
         """
         Sequentially runs the enabled cleaners on a single row.
-        
-        If a cleaner invalidates a row (returns an empty list), subsequent 
+
+        If a cleaner invalidates a row (returns an empty list), subsequent
         cleaning steps are skipped for that row.
 
         Args:
@@ -107,7 +108,7 @@ class LineOrchestrator:
             errors (LineError): The pre-detected errors for this specific row.
 
         Returns:
-            Tuple[List[str], LineError]: The final state of the row (original or empty) 
+            Tuple[List[str], LineError]: The final state of the row (original or empty)
                 and the associated error map.
         """
         current_row = list(row)

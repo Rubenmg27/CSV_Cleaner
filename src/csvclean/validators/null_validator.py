@@ -1,28 +1,23 @@
-from numpy import nan
-from csvclean.models.data_register import ErrorTypes, LineErrors, CsvContent
-from csvclean.models.config import Configuration
-
-from .base_validator import BaseValidator
-from .data_validator import DataValidator
 import pandas as pd
-from math import isnan
 
-class NullValidator(BaseValidator):
+from csvclean.models.config import Configuration
+from csvclean.models.data_register import ErrorTypes, LineError
 
+
+class NullValidator:
     def is_null(self, value: str) -> bool:
         """
-            Check of "value" has a null value
+        Check of "value" has a null value
 
-            :param value: Value to check
-            :type line: CsvContent
-            :return: Boolean to indicate if is null value
-            :rtype: bool
+        :param value: Value to check
+        :type line: CsvContent
+        :return: Boolean to indicate if is null value
+        :rtype: bool
         """
 
         # DataValidator.require_csvcontent(value, "value")
 
-        return bool(pd.isna(value))
-
+        return bool("" == value)
 
     # def is_null(self, value: CsvContent) -> bool:
     #     """
@@ -47,35 +42,27 @@ class NullValidator(BaseValidator):
 
     #     return null_errors
 
-
-    def validate_line(self, line: list[str], config: Configuration) -> LineErrors:
+    def validate_line(self, line: list[str], config: Configuration) -> LineError:
         """
-            Validate there is not null errors in line
+        Validate there is not null errors in line
 
-            :param line: Line to check
-            :type line: pd.DataFrame
-            :param config: Configuration of validator
-            :type config: Configuration
-            :return: List of null errors in line
-            :rtype: list[LineError]
+        :param line: Line to check
+        :type line: pd.DataFrame
+        :param config: Configuration of validator
+        :type config: Configuration
+        :return: List of null errors in line
+        :rtype: list[LineError]
         """
         # DataValidator.require_one_row(line, "null_validator.validate_line.line")
 
-        null_errors: LineErrors = {}
+        null_errors: LineError = {}
 
-        #Puede que falta listar por el numero de columnas poruqe puede haber menos elementos de los debidos
-        for  column_number, element in enumerate(line):
-
+        # Puede que falta listar por el numero de columnas poruqe puede haber menos elementos de los debidos
+        for column_number, element in enumerate(line):
             if self.is_null(element):
                 null_errors[column_number] = ErrorTypes.NULL
 
         return null_errors
-
-
-
-
-
-
 
     # def validate_line(self, line: pd.DataFrame, config: Configuration) -> list[LineError]:
     #     """
