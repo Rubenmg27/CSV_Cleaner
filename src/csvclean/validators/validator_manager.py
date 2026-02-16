@@ -6,6 +6,14 @@ from .type_validator import TypeValidator
 
 
 class ValidatorManager:
+    """
+    Manage the validation of the input line, using the Nullvalidator and TypeValidator
+
+    :atribute null_validator: Instance of NullValidator
+    :type null_validator: NullValidator
+    :atribute type_validator: Instance of TypeValidator
+    :type type_validator: TypeValidator
+    """
 
     def __init__(self):
         self.null_validator = NullValidator()
