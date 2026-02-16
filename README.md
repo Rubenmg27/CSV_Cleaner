@@ -1,4 +1,4 @@
-# CSV Cleaner & Validator
+# CSV Cleaner 
 
 Una herramienta robusta de limpieza y validación de datos para archivos CSV, diseñada siguiendo principios de **Clean Code** y arquitectura modular. Este sistema permite detectar problemas de calidad y aplicar correcciones automáticas mediante un orquestador configurable.
 
@@ -79,3 +79,4 @@ There are 0 of ErrorTypes.TYPE.
 There were 5 errors in total.
 3 rows has been fixed.
 ```
+
