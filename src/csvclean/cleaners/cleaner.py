@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from typing import Any
 
 from csvclean.models.data_register import ErrorTypes, LineError
+from csvclean.validators.data_validator import DataValidator
 
 
 @dataclass
@@ -32,6 +34,8 @@ class NullCleaner:
             Tuple[List[str], LineError]: An empty list and the errors if a NULL
                 is found; otherwise, the original row and errors.
         """
+        row = DataValidator.require_row(row)
+        errors = DataValidator.require_line_error(errors)
         if ErrorTypes.NULL in errors.values():
             return [], errors
         return row, errors
@@ -52,29 +56,31 @@ class TypeCleaner:
             Tuple[List[str], LineError]: An empty list and the errors if a TYPE
                 error is found; otherwise, the original row and errors.
         """
+        row = DataValidator.require_row(row)
+        errors = DataValidator.require_line_error(errors)
         if any(err == ErrorTypes.TYPE for err in errors.values()):
             return [], errors
         return row, errors
 
 
-class DuplicateCleaner:
-    """Cleaner specialized in handling duplicate record errors."""
+# class DuplicateCleaner:
+#     """Cleaner specialized in handling duplicate record errors."""
 
-    def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
-        """
-        Validates if the row is marked as a DUPLICATE.
+#     def clean(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
+#         """
+#         Validates if the row is marked as a DUPLICATE.
 
-        Args:
-            row (List[str]): The input data row as a list of strings.
-            errors (LineError): Dictionary mapping column indices to ErrorTypes.
+#         Args:
+#             row (List[str]): The input data row as a list of strings.
+#             errors (LineError): Dictionary mapping column indices to ErrorTypes.
 
-        Returns:
-            Tuple[List[str], LineError]: An empty list and the errors if a DUPLICATE
-                error is found; otherwise, the original row and errors.
-        """
-        if any(e == ErrorTypes.DUPLICATE for e in errors.values()):
-            return [], errors
-        return row, errors
+#         Returns:
+#             Tuple[List[str], LineError]: An empty list and the errors if a DUPLICATE
+#                 error is found; otherwise, the original row and errors.
+#         """
+#         if any(e == ErrorTypes.DUPLICATE for e in errors.values()):
+#             return [], errors  # noqa: ERA001
+#         return row, errors  # noqa: ERA001
 
 
 class LineOrchestrator:
@@ -83,7 +89,7 @@ class LineOrchestrator:
     based on a provided configuration.
     """
 
-    def __init__(self, config: dict[str, bool]):
+    def __init__(self, config: Any):
         """
         Initializes the orchestrator with specific cleaning toggles.
 
@@ -91,10 +97,14 @@ class LineOrchestrator:
             config (Dict[str, bool]): Configuration dictionary (e.g.,
                 {"use_null": True, "use_type": True, "use_duplicate": True}).
         """
-        self.config = config
+        
+        self.config = {
+                    "use_null": getattr(config, "trate_nullerror", False),
+                    "use_type": getattr(config, "trate_typeerror", False),
+                }
         self.null_cleaner = NullCleaner()
         self.type_cleaner = TypeCleaner()
-        self.duplicate_cleaner = DuplicateCleaner()
+        # self.duplicate_cleaner = DuplicateCleaner()  # noqa: ERA001
 
     def process(self, row: list[str], errors: LineError) -> tuple[list[str], LineError]:
         """
@@ -121,8 +131,8 @@ class LineOrchestrator:
         if current_row and self.config.get("use_type", False):
             current_row, _ = self.type_cleaner.clean(current_row, errors)
 
-        # 3. Duplicate Cleaning (only if row is still valid)
-        if current_row and self.config.get("use_duplicate", False):
-            current_row, _ = self.duplicate_cleaner.clean(current_row, errors)
+        # # 3. Duplicate Cleaning (only if row is still valid)
+        # if current_row and self.config.get("use_duplicate", False):
+        #     current_row, _ = self.duplicate_cleaner.clean(current_row, errors)  # noqa: ERA001
 
         return current_row, errors

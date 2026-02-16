@@ -1,6 +1,9 @@
-from typing import Any
+from typing import Any, List, get_args
 
-from csvclean.models import Configuration
+from csvclean.models.data_register import ErrorTypes
+import pandas as pd
+
+from csvclean.models.config import Configuration
 
 
 class DataValidator:
@@ -73,3 +76,24 @@ class DataValidator:
         if not isinstance(data, list) and all(isinstance(element, str) for element in data):
             raise TypeError(f"{name} must be list[str], got {type(data).__name__}")
         return data
+    @staticmethod
+    def require_row(row: Any) -> list[str]:
+        """
+        Ensures the input is a list of strings (a row).
+
+        :raises TypeError: If input is not a list.
+        """
+        if not isinstance(row, list):
+            raise TypeError(f"Row must be a list, got {type(row).__name__}")
+        return row
+
+    @staticmethod
+    def require_line_error(errors: Any) -> dict[int, ErrorTypes]:
+        """
+        Ensures the input is a dictionary of ErrorTypes.
+
+        :raises TypeError: If input is not a dict.
+        """
+        if not isinstance(errors, dict):
+            raise TypeError(f"Errors must be a dictionary, got {type(errors).__name__}")
+        return errors
